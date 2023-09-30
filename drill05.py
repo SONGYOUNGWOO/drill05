@@ -69,7 +69,7 @@ while running:
     
     update_canvas()
 
-
+close_canvas()
 
 
 
