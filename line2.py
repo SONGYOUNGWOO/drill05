@@ -5,72 +5,76 @@ TUK_WIDTH, TUK_HEIGHT = 1280, 1024
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
 tuk_ground = load_image('TUK_GROUND.png')
 daco_character = load_image('Daco.png')
-hand_character = load_image('hand_arrow')
-
-# def stop():
-#     turtle.bye()
-hx1 = random.randint(0, 1280)
-hy1 = random.randint(0, 1024)
-hx2, hy2 = 0, 0
-hand_point = [hx1, hy1, hx2, hy2]
-catch = False
-running = True
-x = TUK_WIDTH // 2
-y = TUK_HEIGHT // 2
-frame = 0  # 0,1 좌우
-frame2 = 0  # 2,3 상하
-dirx = 0
-diry = 0
+hand_character = load_image('hand_arrow.png')
 
 
-def draw_hand_arrow(x1, y1, x2, y2):
-    while True:
-        if catch:
-            hand_character.draw(x1, y1)
-        else:
-            x2 = random.randint(0, 1280)
-            y2 = random.randint(0, 1024)
-            x1 = hx2
-            y1 = hy2
-
-
-def draw_daco_point(x1,y1):
-    while True:
-        if catch:
-            clear_canvas()
-            tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
-            daco_character.clip_draw(frame * 121, 122, 121, 122, x1, y1, 120, 120)
-            update_canvas()
-            frame = (frame + 1) % 9
-            delay(0.03)
-        else
-
-
-while running:
-
-    clear_canvas()
+def tuk_canvas():
     tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
 
-    if x < 0:
-        x = 0
-    elif x > TUK_WIDTH:
-        x = TUK_WIDTH
 
-    if y < 0:
-        y = 0
-    elif y > TUK_HEIGHT:
-        y = TUK_HEIGHT
+def draw_hand(p):
+    hand_character.draw_now(p[0], p[1])
 
-    hand_character.draw(hx1, hy1)
+def rightleft(p1,p2):
+    global left,right
 
-    if catch:
+    if p2[0] > p1[0]:
+        right = True
+        left = False
+    else:
+        left = True
+        right = False
 
 
+def draw_line(p1, p2):
+    rightleft(p1, p2)
 
+    x1, y1 = p1[0], p1[1]
+    x2, y2 = p2[0], p2[1]
+
+    for i in range(0, 101, 5):
+        t = i / 100  # (0~1)까지
+        x = (1 - t) * x1 + t * x2
+        y = (1 - t) * y1 + t * y2
+
+        draw_daco((x, y))
+        draw_hand(p2)
+
+
+def draw_daco(p):
+    clear_canvas()
+    tuk_canvas()
+    global frame
+
+    if right:
+        daco_character.clip_draw(frame * 121, 122, 121, 122, p[0], p[1], 120, 120)
+    elif left:
+        daco_character.clip_draw(frame * 121, 0, 121, 122, p[0], p[1], 120, 120)
+
+    frame += 1
+    frame = (frame + 1) % 9
+    delay(0.03)
     update_canvas()
 
-    frame = (frame + 1) % 9
-    frame2 = (frame2 + 1) % 7
-    x += dirx * 8
-    y += diry * 8
-    delay(0.03)
+# def change_pont(p1,p2):
+#     tmp = p1
+#     p2 = tmp
+
+right = False
+left = False
+frame = 0
+points = [(random.randint(0, TUK_WIDTH), random.randint(0, TUK_HEIGHT)) for i in range(10)]
+
+
+while True:
+    clear_canvas()
+    tuk_canvas()
+    update_canvas()
+
+
+
+    for i in range(0, len(points) - 1):
+        draw_line(points[i], points[i + 1])
+
+
+

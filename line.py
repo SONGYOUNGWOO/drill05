@@ -73,13 +73,13 @@ def draw_line(p1, p2):
     draw_point(p2)  # a마지막 점
 
 prepare_turtle_canvas()
-# points = [(-300, 200), (400, 350), (300, -300), (-200, -200)]
+
 points = [(random.randint(-500, 500), random.randint(-350, 350)) for i in range(10)]
 
-for p in points:
-    draw_big_point(p)
+# for p in points:
+#     draw_big_point(p)
 
 for i in range(0, len(points)-1):
     draw_line(points[i], points[i+1])
-draw_line(points[-1], points[0])
-turtle.done()
+# draw_line(points[-1], points[0])
+# turtle.done()
