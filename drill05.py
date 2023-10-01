@@ -1,5 +1,6 @@
 from pico2d import *
 import random
+import math
 
 TUK_WIDTH, TUK_HEIGHT = 1280, 1024
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
@@ -39,15 +40,15 @@ def draw_line():
     x1 = (1 - 0.05) * x1 + 0.05 * x2
     y1 = (1 - 0.05) * y1 + 0.05 * y2
 
-    distance = (x2 -x1)**2 +(y2-y1)**2
+    distance = ((x2 - x1)**2 + (y2 - y1)**2)**0.5
     if distance <= 50:
-        x2,y2 =random.randint(0, TUK_WIDTH), random.randint(0, TUK_HEIGHT)
+        x2, y2 = random.randint(0, TUK_WIDTH), random.randint(0, TUK_HEIGHT)
 
 running = True
 tuk_canvas()
 frame = 0
-x1 ,y1 = TUK_WIDTH // 2 , TUK_HEIGHT // 2
-x2,y2 = random.randint(0, TUK_WIDTH), random.randint(0, TUK_HEIGHT)
+x1, y1 = TUK_WIDTH // 2 , TUK_HEIGHT // 2
+x2, y2 = random.randint(0, TUK_WIDTH), random.randint(0, TUK_HEIGHT)
 right, left = False , False
 
 while running:
@@ -56,15 +57,17 @@ while running:
     rightleft(x1, x2)
     handle_events()
 
+    hand_character.draw(x2, y2)
+
     if right:
         daco_character.clip_draw(frame * 121, 122, 121, 122, x1, y1, 120, 120)
     elif left:
         daco_character.clip_draw(frame * 121, 0, 121, 122, x1, y1, 120, 120)
 
-    hand_character.draw(x2,y2)
 
     frame = (frame + 1) % 9
     delay(0.02)
+
     draw_line()
     
     update_canvas()
